@@ -4,22 +4,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-// import useVersionSync from '@/actions/useVersionSync';
 import Logo from '@/components/common/logo';
 import UserCard from '@/components/common/user-card';
+import MobileNav from '@/components/navbar/MobileNav';
 import { cn } from '@/lib/utils';
-// import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { NAV_LINKS } from './links';
-import MobileNav from './mobile-navbar';
+// import MobileNav from './mobile-navbar';
 
 const Navbar = () => {
   const [scrolling, setIsScrolling] = useState<boolean>(false);
-  //   const { status } = useSession();
-  const status = 'authenticated';
+  const { status } = useSession();
   const pathname = usePathname();
-
-  //   const version = 'v1.0';
-  //   useVersionSync(version);
 
   const handleScrollEvent = () => {
     if (window.scrollY > 1) {
@@ -39,11 +35,11 @@ const Navbar = () => {
     <nav
       className={`${
         scrolling ? 'shadow-md' : 'shadow-none'
-      } sticky left-0 right-0 top-0 z-40 bg-background px-2 lg:px-0`}
+      } sticky left-0 right-0 top-0 z-40 bg-muted border-b px-2 lg:px-4`}
     >
       <div
         className={cn(
-          `relative mx-auto flex w-full max-w-[1200px] items-center gap-x-4 transition-all duration-500 md:justify-between`,
+          `relative mx-auto flex w-full max-w-[1440px] items-center gap-x-4 transition-all duration-500 md:justify-between`,
           scrolling ? 'py-2' : 'py-4 md:py-6',
           status === 'authenticated' && 'justify-between md:justify-between'
         )}
@@ -57,7 +53,7 @@ const Navbar = () => {
               <Link
                 key={index}
                 href={item.link}
-                className={`p-3 text-[16px] font-medium text-neutral-dark-1 transition-all duration-300 hover:text-primary ${
+                className={`py-3 px-4 text-[16px] font-medium transition-all duration-300 rounded-lg border border-transparent hover:text-primary hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 ${
                   pathname === item.link ? 'text-primary' : ''
                 }`}
               >
@@ -75,7 +71,7 @@ const Navbar = () => {
               Log in
             </Link>
             <Link
-              href="/register"
+              href="/signup"
               className="grid h-[44px] place-items-center whitespace-nowrap rounded-md border border-primary bg-primary px-4 text-white hover:bg-destructive lg:px-8"
             >
               Get Started

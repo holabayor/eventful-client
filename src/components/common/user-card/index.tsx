@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,10 +22,8 @@ const handleLogout = async () => {
 };
 
 const UserCard = () => {
-  // const { data: session, status } = useSession();
-  // const { user } = session ?? {};
-  const status = 'authenticated';
-  const user = { email: 'testuser@mail.com', name: 'John Doe', image: '' };
+  const { data: session, status } = useSession();
+  const { user } = session ?? {};
 
   return (
     <DropdownMenu>

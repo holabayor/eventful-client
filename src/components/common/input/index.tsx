@@ -8,8 +8,7 @@ import CustomButton from '@/components/common/common-button/common-button';
 const inputVariants = cva('text-sm rounded-md transition-colors', {
   variants: {
     variant: {
-      primary:
-        'border-primary text-primary focus:outline-none focus:border-primary',
+      primary: 'border-primary focus:outline-none focus:border-primary',
       border:
         'border-border text-foreground focus:outline-none focus:border-border',
     },
@@ -95,7 +94,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProperties>(
             className={cn(
               inputVariants({ variant, state }),
               'w-full border px-4 py-2',
-              'flex h-10 rounded-md border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+              'flex h-10 rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
               className
             )}
             ref={reference}

@@ -20,40 +20,18 @@ export const SignupSchema = z.object({
   email: z.string().email({
     message: 'Invalid email address',
   }),
-  password: z
-    .string()
-    .min(6, {
-      message: 'Password must be at least 6 characters',
-    })
-    .refine((password) => /[A-Z]/.test(password), {
-      message: 'Password must contain at least one uppercase letter',
-    })
-    .refine((password) => /\d/.test(password), {
-      message: 'Password must contain at least one number',
-    })
-    .refine((password) => /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password), {
-      message: 'Password must contain at least one symbol',
-    }),
+  password: z.string().min(6, {
+    message: 'Password must be at least 6 characters',
+  }),
 });
 
 export const LoginSchema = z.object({
   email: z.string().email({
     message: 'Enter a valid email address',
   }),
-  password: z
-    .string()
-    .min(6, {
-      message: 'Password must be at least 6 characters',
-    })
-    .refine((password) => /[A-Z]/.test(password), {
-      message: 'Password must contain at least one uppercase letter',
-    })
-    .refine((password) => /\d/.test(password), {
-      message: 'Password must contain at least one number',
-    })
-    .refine((password) => /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password), {
-      message: 'Password must contain at least one symbol',
-    }),
+  password: z.string().min(6, {
+    message: 'Password must be at least 6 characters',
+  }),
 });
 
 export const ForgotPasswordSchema = z.object({
@@ -90,3 +68,19 @@ export const ResetPasswordSchema = z
     message: 'Password do not mtach',
     path: ['confirmPassword'],
   });
+
+export const EventSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  date: z.string().min(1, 'Date is required'),
+  time: z.string().min(1, 'Time is required'),
+  location: z.string().min(1, 'Location is required'),
+  imageFile: z
+    .instanceof(FileList)
+    .refine((file) => file && file.item(0)?.type.startsWith('image/'), {
+      message: 'Only image files are allowed',
+    })
+    .optional(),
+  category: z.string().min(1, 'Category is required'),
+  additionalDetails: z.string().optional(),
+});

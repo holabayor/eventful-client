@@ -14,7 +14,6 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { LoginSchema } from '@/schemas';
-// import { loginAuth } from '@/utils/loginAuth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { signIn, useSession } from 'next-auth/react';
@@ -28,15 +27,8 @@ const Login = () => {
   const router = useRouter();
   const { toast } = useToast();
   const { status } = useSession();
-  const [apiUrl, setApiUrl] = useState('');
   const [isLoading, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
-
-  const loginAuth: any = () => {};
-
-  if (status === 'authenticated') {
-    router.push('/dashboard');
-  }
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -46,34 +38,30 @@ const Login = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
-    startTransition(async () => {
-      await loginAuth(values).then(async (data: any) => {
-        const { email, password } = values;
-
-        if (data) {
-          await signIn(
-            'credentials',
-            {
-              email,
-              password,
-              redirect: false,
-            },
-            { callbackUrl: '/dashboard' }
-          );
-          router.push('/dashboard');
-        }
-        toast({
-          title: data.status === 200 ? 'Login success' : 'An error occurred',
-          description: data.status === 200 ? 'Redirecting' : data.error,
-        });
-      });
+  const handleSubmit = async (values: z.infer<typeof LoginSchema>) => {
+    // startTransition(true);
+    const result = await signIn('credentials', {
+      redirect: false,
+      email: values.email,
+      password: values.password,
     });
+
+    if (result?.error) {
+      console.log('Error during login', result);
+      toast({
+        variant: 'destructive',
+        title: 'Login failed',
+        description: result.error,
+      });
+    } else {
+      router.push('/dashboard');
+    }
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  if (status === 'authenticated') {
+    router.push('/dashboard');
+  }
+
   useEffect(() => {
     document.title = 'Login';
   }, []);
@@ -81,10 +69,10 @@ const Login = () => {
     <div className="flex min-h-full items-center justify-center px-4 py-10 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center">
-          <h1 className="font-inter text-neutralColor-dark-2 mb-5 text-center text-2xl font-semibold leading-tight">
+          <h1 className=" mb-5 text-center text-2xl font-semibold leading-tight">
             Login
           </h1>
-          <p className="font-inter text-neutralColor-dark-2 mt-2 text-center text-sm font-normal leading-6">
+          <p className=" mt-2 text-center text-sm font-normal leading-6">
             Welcome back, you&apos;ve been missed!
           </p>
         </div>
@@ -125,28 +113,27 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-center">
           <hr className="w-full border-t border-gray-300" />
-          <span className="font-inter text-neutralColor-dark-1 px-3 text-xs font-normal leading-tight">
-            OR
-          </span>
+          <span className="px-3 text-xs font-normal leading-tight">OR</span>
           <hr className="w-full border-t border-gray-300" />
         </div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-neutralColor-dark-2">
-                    Email
-                  </FormLabel>
+                  <FormLabel className="">Email</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
                       placeholder="Enter Email Address"
                       {...field}
                       className={cn(
-                        'font-inter w-full rounded-md border px-3 py-6 text-sm font-normal leading-[21.78px] transition duration-150 ease-in-out focus:outline-none',
+                        'w-full rounded-md border px-3 py-6 text-sm font-normal leading-[21.78px] transition duration-150 ease-in-out focus:outline-none',
                         form.formState.errors.email && 'border-destructive'
                       )}
                     />
@@ -160,9 +147,7 @@ const Login = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-neutralColor-dark-2">
-                    Password
-                  </FormLabel>
+                  <FormLabel className="">Password</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
@@ -171,13 +156,13 @@ const Login = () => {
                         placeholder="Enter Password"
                         {...field}
                         className={cn(
-                          'font-inter w-full rounded-md border px-3 py-6 text-sm font-normal leading-[21.78px] transition duration-150 ease-in-out focus:outline-none',
+                          'w-full rounded-md border px-3 py-6 text-sm font-normal leading-[21.78px] transition duration-150 ease-in-out focus:outline-none',
                           form.formState.errors.password && 'border-destructive'
                         )}
                       />
                       <button
                         type="button"
-                        onClick={togglePasswordVisibility}
+                        onClick={() => setShowPassword(!showPassword)}
                         className="absolute inset-y-0 right-0 flex items-center pr-3"
                       >
                         {showPassword ? (
@@ -217,20 +202,11 @@ const Login = () => {
           </form>
         </Form>
 
-        <CustomButton
-          type="button"
-          variant="outline"
-          size="default"
-          className="w-full py-6"
-        >
-          <Link href="/login/magic-link">Sign in with magic link</Link>
-        </CustomButton>
-
-        <p className="font-inter text-neutralColor-dark-1 mt-5 text-center text-sm font-normal leading-[15.6px]">
+        <p className="mt-5 text-center text-sm font-normal leading-[15.6px]">
           Don&apos;t Have An Account?{' '}
           <Link
-            href="/register"
-            className="font-inter ms-1 text-left text-base font-bold leading-[19.2px] text-primary hover:text-orange-400"
+            href="/signup"
+            className="ms-1 text-left text-base font-bold leading-[19.2px] text-primary hover:text-orange-400"
             data-testid="link"
           >
             Sign Up
@@ -242,14 +218,14 @@ const Login = () => {
           By logging in, you agree to the{' '}
           <a
             href="#"
-            className="text-sm font-bold text-primary hover:text-orange-500"
+            className="text-sm font-medium text-primary hover:text-orange-500"
           >
             Terms of Service
           </a>{' '}
           and{' '}
           <a
             href="#"
-            className="text-sm font-bold text-primary hover:text-orange-500"
+            className="text-sm font-medium text-primary hover:text-orange-500"
           >
             Privacy Policy
           </a>

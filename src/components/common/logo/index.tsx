@@ -12,6 +12,7 @@ const Logo = () => {
         alt="Eventful Logo"
         height={48}
         width={158}
+        priority
         className="h-full w-full object-contain"
       />
     </Link>

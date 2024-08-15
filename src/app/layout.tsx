@@ -1,3 +1,5 @@
+import Footer from '@/components/layouts/footer';
+import Navbar from '@/components/layouts/navbar';
 import ProgressBarProvider from '@/components/ProgressBarProvider';
 import { Toaster } from '@/components/ui/toaster';
 import AuthProvider from '@/contexts/AuthContext';
@@ -20,11 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="mx-auto h-full w-full max-w-[1920px]">
-          <ProgressBarProvider />
-          <AuthProvider>{children}</AuthProvider>
-          <Toaster />
-        </div>
+        {/* <div className="mx-auto h-full w-full max-w-[1440px]"> */}
+        <ProgressBarProvider />
+        <AuthProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </AuthProvider>
+        <Toaster />
+        {/* </div> */}
       </body>
     </html>
   );
