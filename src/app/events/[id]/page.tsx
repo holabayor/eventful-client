@@ -15,9 +15,16 @@ const EventDetailPage = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
+        console.log('Fetching event with ', id);
         const eventData = await getEventById(id as string);
+        console.log(
+          'Event is ',
+          eventData,
+          'and type of event is ',
+          typeof eventData
+        );
         setEvent(eventData);
-      } catch (error) {
+      } catch (error: any) {
         toast({ description: error.message });
       } finally {
         setIsLoading(false);

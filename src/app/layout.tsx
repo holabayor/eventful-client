@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import AuthProvider from '@/contexts/AuthContext';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Suspense } from 'react';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -25,9 +26,11 @@ export default function RootLayout({
         {/* <div className="mx-auto h-full w-full max-w-[1440px]"> */}
         <ProgressBarProvider />
         <AuthProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <Suspense>
+            <Navbar />
+            {children}
+            <Footer />
+          </Suspense>
         </AuthProvider>
         <Toaster />
         {/* </div> */}

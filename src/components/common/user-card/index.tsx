@@ -62,25 +62,25 @@ const UserCard = () => {
         </span>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/dashboard" passHref legacyBehavior>
+          <Link href="/" passHref legacyBehavior>
             <DropdownMenuItem className="cursor-pointer">
               <span className="font-medium">Overview</span>
               <DropdownMenuShortcut>⇧O</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
-          <Link href="/dashboard/customers" passHref legacyBehavior>
+          <Link href="//customers" passHref legacyBehavior>
             <DropdownMenuItem className="cursor-pointer">
               <span className="font-medium">Customers</span>
               <DropdownMenuShortcut>⇧C</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
-          <Link href="/dashboard/products" passHref legacyBehavior>
+          <Link href="//products" passHref legacyBehavior>
             <DropdownMenuItem className="cursor-pointer">
               <span className="font-medium">Products</span>
               <DropdownMenuShortcut>⇧P</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
-          <Link href="/dashboard/admin/settings" passHref legacyBehavior>
+          <Link href="//admin/settings" passHref legacyBehavior>
             <DropdownMenuItem className="cursor-pointer">
               <span className="font-medium">Settings</span>
               <DropdownMenuShortcut>⇧G</DropdownMenuShortcut>

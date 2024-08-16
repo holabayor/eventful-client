@@ -6,16 +6,18 @@ export const getCategories = async (): Promise<Category[]> => {
     method: 'GET',
   });
 
-  console.log('Server response is ', res);
   return res.categories;
 };
 
-export const getAllEvents = async (): Promise<Event[]> => {
-  const res = await apiRequest('/events', {
+export const getAllEvents = async (
+  page = 1,
+  limit = 18
+): Promise<{ events: Event[]; metadata: any }> => {
+  const res = await apiRequest(`/events?page=${page}&limit=${limit}`, {
     method: 'GET',
   });
 
-  return res.data.events;
+  return res.data;
 };
 
 export const getEventById = async (id: string): Promise<Event> => {

@@ -54,12 +54,12 @@ const Login = () => {
         description: result.error,
       });
     } else {
-      router.push('/dashboard');
+      router.push('/');
     }
   };
 
   if (status === 'authenticated') {
-    router.push('/dashboard');
+    router.push('/');
   }
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const Login = () => {
           <CustomButton
             variant="outline"
             isLeftIconVisible={true}
-            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+            onClick={() => signIn('google', { callbackUrl: '/' })}
             icon={
               <svg
                 width="25"

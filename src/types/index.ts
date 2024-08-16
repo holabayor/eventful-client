@@ -8,6 +8,8 @@ export interface Event {
   _id: string;
   title: string;
   imageUrl: string;
+  date: Date;
+  time: string;
   startDate: string; // Consider using Date
   endDate: string; // Consider using Date
   startTime: string;
@@ -15,7 +17,7 @@ export interface Event {
   location: string;
   creator: User;
   description: string;
-  category: string;
+  category: Category;
   attendees: string[];
   price: number;
 }

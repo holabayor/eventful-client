@@ -32,7 +32,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   if (status === 'authenticated') {
-    router.push('/dashboard');
+    router.push('/');
   }
 
   const form = useForm<z.infer<typeof SignupSchema>>({
@@ -72,7 +72,7 @@ const Signup = () => {
             description: result.error,
           });
         } else {
-          router.push('/dashboard');
+          router.push('/');
         }
       } else {
         toast({
@@ -99,7 +99,7 @@ const Signup = () => {
           <CustomButton
             variant="outline"
             isLeftIconVisible={true}
-            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+            onClick={() => signIn('google', { callbackUrl: '/' })}
             icon={
               <svg
                 width="25"

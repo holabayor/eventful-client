@@ -69,18 +69,22 @@ export const ResetPasswordSchema = z
     path: ['confirmPassword'],
   });
 
+const isBrowser = typeof window !== 'undefined';
+
 export const EventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
-  date: z.string().min(1, 'Date is required'),
+  date: z.date({ required_error: 'Event date is required' }),
   time: z.string().min(1, 'Time is required'),
   location: z.string().min(1, 'Location is required'),
-  imageFile: z
-    .instanceof(FileList)
-    .refine((file) => file && file.item(0)?.type.startsWith('image/'), {
-      message: 'Only image files are allowed',
-    })
-    .optional(),
+  imageFile: isBrowser
+    ? z
+        .instanceof(FileList)
+        .refine((file) => file && file.item(0)?.type.startsWith('image/'), {
+          message: 'Only image files are allowed',
+        })
+        .optional()
+    : z.any().optional(),
   category: z.string().min(1, 'Category is required'),
   additionalDetails: z.string().optional(),
 });

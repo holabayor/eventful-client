@@ -10,10 +10,10 @@ interface EventDetailsProps {
 
 const EventDetail: React.FC<EventDetailsProps> = ({ event }) => {
   return (
-    <section className="px-6 py-8 max-w-7xl mx-auto">
+    <section className="px-6 py-8 w-full max-w-7xl mx-auto">
       <div className="relative w-full mx-auto h-48 sm:h-72 md:h-96">
         <Image
-          src="/events/event-img1.jpeg"
+          src={event.imageUrl || '/events/event-img1.jpeg'}
           alt={event.title}
           layout="fill"
           objectFit="cover"
@@ -28,20 +28,20 @@ const EventDetail: React.FC<EventDetailsProps> = ({ event }) => {
           </h2>
           <div className="text-base sm:text-lg font-semibold text-gray-700 mb-2">
             <Calendar className="size-5 inline-block mr-2" />
-            {event.startDate} - {event.endDate}
+            {String(event.date)} - {event.endDate}
           </div>
           <div className="flex items-center text-sm md:text-base font-semibold text-gray-700 mb-2">
             <Clock className="size-5 inline-block mr-2" />
-            {event.startTime} - {event.endTime}
+            {event.time} - {event.endTime}
           </div>
           <p className="text-sm md:text-base text-gray-600 flex items-center mb-2">
             <MapPin className="size-5 mr-2" /> {event.location}
           </p>
           <p className="text-sm md:text-base text-gray-600 flex items-center mb-2">
-            <User className="size-5 mr-2" /> Hosted by {event.creator.name}
+            <User className="size-5 mr-2" /> Hosted by {event.creator?.name}
           </p>
           <p className="text-sm md:text-base text-gray-600 flex items-center mb-2">
-            <Tag className="size-5 mr-2" /> Category: {event.category}
+            <Tag className="size-5 mr-2" /> Category: {event.category?.name}
           </p>
           <p className="text-sm md:text-base text-gray-600 flex items-center mb-4">
             <Users className="size-5 mr-2" /> Attendees:{' '}

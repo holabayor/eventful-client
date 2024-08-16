@@ -16,11 +16,18 @@ import { useCategories } from '@/hooks/useCategories';
 import { useEvents } from '@/hooks/useEvents';
 import { createEvent } from '@/lib/apiService';
 import { uploadImageToCloudinary } from '@/lib/cloudinary';
+import { cn } from '@/lib/utils';
 import { EventSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { Button } from '../ui/button';
+import { Calendar } from '../ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '../ui/select';
 
 const EventForm = () => {
   const { toast } = useToast();
@@ -32,7 +39,7 @@ const EventForm = () => {
     defaultValues: {
       title: '',
       description: '',
-      date: '',
+      date: new Date(),
       time: '',
       location: '',
       category: '',
@@ -59,7 +66,7 @@ const EventForm = () => {
       };
 
       delete eventPayload.imageFile;
-      const response = await createEvent(eventPayload);
+      const response = await createEvent(eventPayload as any);
 
       toast({
         title: 'Event created successfully',
@@ -105,7 +112,7 @@ const EventForm = () => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea
+                <Input
                   {...field}
                   placeholder="Enter event description"
                   className="w-full"
@@ -121,9 +128,36 @@ const EventForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date</FormLabel>
-              <FormControl>
-                <Input {...field} type="date" className="w-full" />
-              </FormControl>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    {/* <Input {...field} type="date" className="w-full" /> */}
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-[240px] pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'PPP')
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) => date < new Date()}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -183,22 +217,18 @@ const EventForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <FormControl>
-                <select
-                  {...field}
-                  className="w-full rounded-md border px-3 py-2 text-sm font-normal leading-5 transition duration-150 ease-in-out focus:outline-none"
-                  disabled={categoriesLoading || categories.length === 0}
-                >
-                  <option value="" disabled>
-                    Select category
-                  </option>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger value="">Select event category</SelectTrigger>
+                </FormControl>
+                <SelectContent>
                   {categories.map((category) => (
-                    <option key={category._id} value={category._id}>
+                    <SelectItem key={category._id} value={category._id}>
                       {category.name}
-                    </option>
+                    </SelectItem>
                   ))}
-                </select>
-              </FormControl>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

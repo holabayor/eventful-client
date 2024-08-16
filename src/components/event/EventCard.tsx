@@ -10,13 +10,15 @@ interface EventCardProps {
 const EventCard: React.FC<EventCardProps> = ({ event }) => (
   <div className="flex flex-col rounded-lg w-full mx-auto bg-gray-50 border border-transparent transition-all hover:border-gray-300 hover:bg-gray-100 hover:shadow-md">
     <div className="w-full h-56 sm:h-36 lg:h-40 relative">
-      <Image
-        src="/events/event-img1.jpeg"
-        alt={event.title}
-        layout="fill"
-        objectFit="cover"
-        className="rounded-md"
-      />
+      <Link href={`/events/${event._id}`}>
+        <Image
+          src={event.imageUrl || '/events/event-img1.jpeg'}
+          alt={event.title}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-md"
+        />
+      </Link>
     </div>
     <div className="flex flex-col p-2 text-sm ">
       <Link href={`/events/${event._id}`}>
