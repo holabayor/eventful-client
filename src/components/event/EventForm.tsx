@@ -39,7 +39,7 @@ const EventForm = () => {
     defaultValues: {
       title: '',
       description: '',
-      date: new Date(),
+      date: null as unknown as Date,
       time: '',
       location: '',
       category: '',
@@ -88,177 +88,186 @@ const EventForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="Enter event title"
-                  className="w-full"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="Enter event description"
-                  className="w-full"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    {/* <Input {...field} type="date" className="w-full" /> */}
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        'w-[240px] pl-3 text-left font-normal',
-                        !field.value && 'text-muted-foreground'
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, 'PPP')
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) => date < new Date()}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="time"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Time</FormLabel>
-              <FormControl>
-                <Input {...field} type="time" className="w-full" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="Enter event location"
-                  className="w-full"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="imageFile"
-          render={() => (
-            <FormItem>
-              <FormLabel>Image File</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  className="w-full"
-                  {...fileRef}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <div className="w-full md:max-w-[50%] flex flex-col gap-4">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <SelectTrigger value="">Select event category</SelectTrigger>
+                  <Input
+                    {...field}
+                    placeholder="Enter event title"
+                    className="w-full"
+                  />
                 </FormControl>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category._id} value={category._id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Enter event description"
+                    className="w-full"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-between">
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, 'PPP')
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormField
-          control={form.control}
-          name="additionalDetails"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Additional Details</FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  placeholder="Enter any additional details"
-                  className="w-full"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <CustomButton
-          type="submit"
-          variant="primary"
-          className="w-full py-6"
-          isDisabled={isLoading}
-        >
-          {isLoading ? 'Creating event...' : 'Create Event'}
-        </CustomButton>
+            <FormField
+              control={form.control}
+              name="time"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Time</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="time" className="w-full" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Enter event location"
+                    className="w-full"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="imageFile"
+            render={() => (
+              <FormItem>
+                <FormLabel>Event Image File</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    className="w-full"
+                    {...fileRef}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger value="">
+                      Select event category
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category._id} value={category._id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="additionalDetails"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Additional Details</FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    placeholder="Enter any additional details"
+                    className="w-full"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <CustomButton
+            type="submit"
+            variant="primary"
+            className="w-full md:max-w-40 py-6"
+            isDisabled={isLoading}
+          >
+            {isLoading ? 'Creating event...' : 'Create Event'}
+          </CustomButton>
+        </div>
       </form>
     </Form>
   );

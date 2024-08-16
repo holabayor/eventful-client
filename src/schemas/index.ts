@@ -1,22 +1,9 @@
 import * as z from 'zod';
 
 export const SignupSchema = z.object({
-  firstName: z
-    .string()
-    .min(3, {
-      message: 'First name must be at least 3 characters',
-    })
-    .regex(/^[A-Za-z]+$/, {
-      message: 'First name can only contain alphabets',
-    }),
-  lastName: z
-    .string()
-    .min(3, {
-      message: 'Last name must be at least 3 characters',
-    })
-    .regex(/^[A-Za-z]+$/, {
-      message: 'Last name can only contain alphabets',
-    }),
+  name: z.string().min(3, {
+    message: 'First name must be at least 3 characters',
+  }),
   email: z.string().email({
     message: 'Invalid email address',
   }),

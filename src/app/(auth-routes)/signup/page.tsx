@@ -38,10 +38,9 @@ const Signup = () => {
   const form = useForm<z.infer<typeof SignupSchema>>({
     resolver: zodResolver(SignupSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
-      firstName: '',
-      lastName: '',
     },
   });
 
@@ -169,53 +168,29 @@ const Signup = () => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-6"
           >
-            <div className="flex justify-between">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="">First Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        disabled={isLoading}
-                        placeholder="Enter your first name"
-                        {...field}
-                        className={cn(
-                          'w-full rounded-md border px-3 py-6 text-sm font-normal leading-[21.78px] transition duration-150 ease-in-out focus:outline-none',
-                          form.formState.errors.firstName &&
-                            'border-destructive'
-                        )}
-                      />
-                    </FormControl>
-                    <FormMessage data-testid="name-error" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="">Last Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        disabled={isLoading}
-                        placeholder="Enter your last name"
-                        {...field}
-                        className={cn(
-                          'w-full rounded-md border px-3 py-6 text-sm font-normal leading-[21.78px] transition duration-150 ease-in-out focus:outline-none',
-                          form.formState.errors.lastName && 'border-destructive'
-                        )}
-                      />
-                    </FormControl>
-                    <FormMessage data-testid="name-error" />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="">Full Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      disabled={isLoading}
+                      placeholder="Enter your full name"
+                      {...field}
+                      className={cn(
+                        'w-full rounded-md border px-3 py-6 text-sm font-normal leading-[21.78px] transition duration-150 ease-in-out focus:outline-none',
+                        form.formState.errors.name && 'border-destructive'
+                      )}
+                    />
+                  </FormControl>
+                  <FormMessage data-testid="name-error" />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="email"
