@@ -1,14 +1,47 @@
+import { attendEvent } from '@/lib/apiService';
 import { Event } from '@/types';
 import { Calendar, Clock, MapPin, Tag, User, Users } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { Button } from '../ui/button';
+import { useToast } from '../ui/use-toast';
 
 interface EventDetailsProps {
   event: Event;
 }
 
 const EventDetail: React.FC<EventDetailsProps> = ({ event }) => {
+  const { data: session } = useSession();
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const handleAttendEvent = async () => {
+    if (!session) {
+      router.push(
+        `/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`
+      );
+      return;
+    }
+
+    try {
+      const response = await attendEvent(event._id);
+
+      console.log(response);
+      toast({
+        title: 'Successfully registered for the event!',
+        description: `You are now attending ${event.title}`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Error registering for event',
+        description:
+          error instanceof Error ? error.message : 'Something went wrong',
+      });
+    }
+  };
+
   return (
     <section className="px-6 py-8 w-full max-w-7xl mx-auto">
       <div className="relative w-full mx-auto h-48 sm:h-72 md:h-96">
@@ -51,7 +84,10 @@ const EventDetail: React.FC<EventDetailsProps> = ({ event }) => {
             {event.description}
           </p>
 
-          <Button className="fixed sm:static bottom-0 left-0 right-0 max-sm:rounded-none w-full">
+          <Button
+            onClick={handleAttendEvent}
+            className="fixed sm:static bottom-0 left-0 right-0 max-sm:rounded-none w-full"
+          >
             Register / Attend
           </Button>
         </div>

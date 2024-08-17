@@ -1,4 +1,4 @@
-import { ChevronDown, Menu } from 'lucide-react';
+import { ChevronDown, Menu, User } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -33,20 +33,23 @@ const UserCard = () => {
           {status === 'loading' && (
             <span className="size-8 animate-pulse rounded-full bg-subtle-hover/80 sm:size-10" />
           )}
-          <Avatar className="size-8 sm:size-10">
-            {status === 'authenticated' && (
+
+          {user ? (
+            <Avatar className="size-8 sm:size-10">
               <AvatarImage src={user?.image ?? user?.name?.charAt(0)} />
-            )}
-            <AvatarFallback className="bg-primary/30 uppercase">
-              <Menu className="size-6 text-primary" />
-            </AvatarFallback>
-          </Avatar>
-          <ChevronDown
-            className={cn(
-              'size-4 text-neutral-dark-2 sm:size-5',
-              status !== 'authenticated' && 'hidden'
-            )}
-          />
+              <AvatarFallback className="bg-primary/30 uppercase">
+                <User className="size-6 text-primary" />
+              </AvatarFallback>
+            </Avatar>
+          ) : (
+            <Menu className="size-6 text-primary" />
+          )}
+
+          {status === 'authenticated' && (
+            <ChevronDown
+              className={cn('size-4 text-neutral-dark-2 sm:size-5')}
+            />
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-1 w-56" align="end">
@@ -61,12 +64,12 @@ const UserCard = () => {
 
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/applied-events" passHref legacyBehavior>
+              <Link href="/events/applied" passHref legacyBehavior>
                 <DropdownMenuItem className="cursor-pointer">
                   <span className="font-medium">Applied Events</span>
                 </DropdownMenuItem>
               </Link>
-              <Link href="/created-events" passHref legacyBehavior>
+              <Link href="/events/created" passHref legacyBehavior>
                 <DropdownMenuItem className="cursor-pointer">
                   <span className="font-medium">My Created Events</span>
                 </DropdownMenuItem>

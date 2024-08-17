@@ -1,4 +1,5 @@
-import { getSession } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 interface ApiRequestOptions extends RequestInit {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -10,7 +11,7 @@ export const apiRequest = async (
   endpoint: string,
   options: ApiRequestOptions
 ) => {
-  const { method, requiresAuth = false, body } = options;
+  const { method, requiresAuth = true, body } = options;
 
   const fetchOptions: RequestInit = {
     method,
@@ -39,6 +40,12 @@ export const apiRequest = async (
       fetchOptions
     );
 
+    // Handle 401 Unauthorized
+    if (response.status === 401) {
+      await handleUnauthorized();
+      return null;
+    }
+
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || 'Something went wrong.');
@@ -51,4 +58,14 @@ export const apiRequest = async (
       error instanceof Error ? error.message : 'An unexpected error occurred.'
     );
   }
+};
+
+const handleUnauthorized = async () => {
+  await signOut({ redirect: false });
+  redirectToLogin();
+};
+
+const redirectToLogin = () => {
+  const currentPath = window.location.pathname;
+  redirect(`/login?callbackUrl=${encodeURIComponent(currentPath)}`);
 };
