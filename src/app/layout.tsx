@@ -23,12 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <div className="mx-auto h-full w-full max-w-[1440px]"> */}
         <ProgressBarProvider />
         <AuthProvider>
           <Suspense>
             <Navbar />
-            {children}
+            <main className="flex-grow">{children}</main>
             <Footer />
           </Suspense>
         </AuthProvider>

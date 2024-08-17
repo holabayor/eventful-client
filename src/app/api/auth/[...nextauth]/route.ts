@@ -59,6 +59,21 @@ const authOptions = {
       session.accessToken = token.accessToken; // Add the token to the session
       return session;
     },
+    async signOut({ accessToken }: any) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/logout`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        console.error('Failed to sign out');
+      }
+    },
   },
   pages: {
     signIn: '/login',

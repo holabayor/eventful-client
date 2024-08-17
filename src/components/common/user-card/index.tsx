@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Menu } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -10,15 +10,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
 const handleLogout = async () => {
-  await signOut({
-    callbackUrl: '/',
-  });
+  await signOut({ redirect: false });
 };
 
 const UserCard = () => {
@@ -36,62 +33,74 @@ const UserCard = () => {
           {status === 'loading' && (
             <span className="size-8 animate-pulse rounded-full bg-subtle-hover/80 sm:size-10" />
           )}
-          {status === 'authenticated' && (
-            <Avatar className="size-8 sm:size-10">
-              <AvatarImage src={user?.image ?? ''} />
-              <AvatarFallback className="bg-primary/30 uppercase">
-                {user?.name?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-          )}
+          <Avatar className="size-8 sm:size-10">
+            {status === 'authenticated' && (
+              <AvatarImage src={user?.image ?? user?.name?.charAt(0)} />
+            )}
+            <AvatarFallback className="bg-primary/30 uppercase">
+              <Menu className="size-6 text-primary" />
+            </AvatarFallback>
+          </Avatar>
           <ChevronDown
-            data-testid="chevronDown"
             className={cn(
               'size-4 text-neutral-dark-2 sm:size-5',
-              status !== 'authenticated' && 'opacity-0'
+              status !== 'authenticated' && 'hidden'
             )}
           />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-1 w-56" align="end">
-        <DropdownMenuLabel className="pb-0 pt-3">
-          {user?.name}
-        </DropdownMenuLabel>
-        <span className="block px-2 pb-1 text-xs text-neutral-dark-1">
-          {user?.email ?? 'Signed In'}
-        </span>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <Link href="/" passHref legacyBehavior>
-            <DropdownMenuItem className="cursor-pointer">
-              <span className="font-medium">Overview</span>
-              <DropdownMenuShortcut>⇧O</DropdownMenuShortcut>
+        {status === 'authenticated' ? (
+          <>
+            <DropdownMenuLabel className="pb-0 pt-3">
+              {user?.name}
+            </DropdownMenuLabel>
+            <span className="block px-2 pb-1 text-xs text-neutral-dark-1">
+              {user?.email}
+            </span>
+
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <Link href="/applied-events" passHref legacyBehavior>
+                <DropdownMenuItem className="cursor-pointer">
+                  <span className="font-medium">Applied Events</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/created-events" passHref legacyBehavior>
+                <DropdownMenuItem className="cursor-pointer">
+                  <span className="font-medium">My Created Events</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/settings" passHref legacyBehavior>
+                <DropdownMenuItem className="cursor-pointer">
+                  <span className="font-medium">Settings</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+              <span className="font-medium">Log out</span>
             </DropdownMenuItem>
-          </Link>
-          <Link href="//customers" passHref legacyBehavior>
-            <DropdownMenuItem className="cursor-pointer">
-              <span className="font-medium">Customers</span>
-              <DropdownMenuShortcut>⇧C</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="//products" passHref legacyBehavior>
-            <DropdownMenuItem className="cursor-pointer">
-              <span className="font-medium">Products</span>
-              <DropdownMenuShortcut>⇧P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="//admin/settings" passHref legacyBehavior>
-            <DropdownMenuItem className="cursor-pointer">
-              <span className="font-medium">Settings</span>
-              <DropdownMenuShortcut>⇧G</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Link>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-          <span className="font-medium">Log out</span>
-          <DropdownMenuShortcut>⇧Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
+          </>
+        ) : (
+          <DropdownMenuGroup>
+            <Link href="/signup" passHref legacyBehavior>
+              <DropdownMenuItem className="cursor-pointer">
+                <span className="font-medium">Create an account</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/login" passHref legacyBehavior>
+              <DropdownMenuItem className="cursor-pointer">
+                <span className="font-medium">Login</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/events" passHref legacyBehavior>
+              <DropdownMenuItem className="cursor-pointer">
+                <span className="font-medium">Find events</span>
+              </DropdownMenuItem>
+            </Link>
+          </DropdownMenuGroup>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -76,7 +76,7 @@ const Login = () => {
             Welcome back, you&apos;ve been missed!
           </p>
         </div>
-        <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-x-6 sm:space-y-0">
+        <div className="flex flex-col justify-center space-y-4 sm:space-x-6 sm:space-y-0">
           <CustomButton
             variant="outline"
             isLeftIconVisible={true}

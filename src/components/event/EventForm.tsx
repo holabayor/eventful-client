@@ -86,9 +86,12 @@ const EventForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <div className="w-full md:max-w-[50%] flex flex-col gap-4">
+    <div className="w-full md:grid md:grid-cols-2">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-6 p-4 flex flex-col"
+        >
           <FormField
             control={form.control}
             name="title"
@@ -259,17 +262,21 @@ const EventForm = () => {
               </FormItem>
             )}
           />
+          {/* <Button className="fixed sm:static bottom-0 left-0 right-0 max-sm:rounded-none w-full md:max-w-40 py-6">
+
+          </Button> */}
           <CustomButton
             type="submit"
             variant="primary"
-            className="w-full md:max-w-40 py-6"
+            className="fixed sm:static bottom-0 left-0 right-0 max-sm:rounded-none w-full sm:max-w-40 py-5 sm:py-6"
             isDisabled={isLoading}
           >
             {isLoading ? 'Creating event...' : 'Create Event'}
           </CustomButton>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+      <div className="hidden bg-muted md:block"></div>
+    </div>
   );
 };
 
